@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Recipe from "./Recipe";
+import { uuid } from 'uuidv4';
+import { Button } from 'react-bootstrap';
+import history from "./history.js"
 import "./App.css";
 
 function App() {
@@ -8,7 +11,10 @@ function App() {
 
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState('');
-  const [query, setQuery] = useState('chicken');
+  const [query, setQuery] = useState('steak');
+  // preserve the initial state in a new object
+  this.baseState = this.state
+
   /*
       useState is a hook from react
 
@@ -62,9 +68,15 @@ function App() {
     setQuery(search);
     setSearch('');
   }
+
+  const resetForm = () => {
+    this.setState(this.baseState)
+  }
+
   return (
     <div className="App">
       <form onSubmit={getSearch} className="search-form">
+      <Button variant="btn btn-success" onClick={this.resetForm}>Home</Button> 
         <input className="search-bar" type="text"
           value={search} 
           onChange={updateSearch}
@@ -74,9 +86,9 @@ function App() {
         </button>
       </form>
       <div className="recipes">
-      {recipes.map(recipe => (
+      {recipes.map((recipe, index) => (
         <Recipe
-          key={""}
+          id={uuid()}
           title={recipe.recipe.label} 
           calories={recipe.recipe.calories}
           image={recipe.recipe.image}
